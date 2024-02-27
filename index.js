@@ -34,12 +34,15 @@ const outsideTemperature = new Temperature("Outside");
 Data.data.forEach(entry => {
     barometer.barometerValues.push(entry.data["Barometer"]);
     barometer.trends.push(entry.data["P|Barometric Trend"] / 20);
+    barometer.timestamps.push(entry.timestamp);
 
     insideTemperature.temperatures.push(entry.data["Inside Temperature"]);
     insideTemperature.humidities.push(entry.data["Inside Humidity"] * 100);
+    insideTemperature.timestamps.push(entry.timestamp);
 
     outsideTemperature.temperatures.push(entry.data["Outside Temperature"]);
     outsideTemperature.humidities.push(entry.data["Outside Humidity"] * 100);
+    outsideTemperature.timestamps.push(entry.timestamp);
 });
 
 document.body.appendChild(barometer.place(64));

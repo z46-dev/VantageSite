@@ -1,9 +1,9 @@
-export default class Temperature {
+export default class Wind {
     constructor(name) {
         this.name = name;
-        this.temperatures = []; // Array of temperature values
-        this.humidities = []; // Array of humidity values
-        this.timestamps = []; // Array of timestamps
+        this.windSpeeds = []; // Array of wind speed values
+        this.avg10Min = []; // Array of the avg 10-minute wind speeds
+        this.windDirections = []; // Array of wind directions
 
         this.canvas = document.createElement("canvas");
         this.ctx = this.canvas.getContext("2d");

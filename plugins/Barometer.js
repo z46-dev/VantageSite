@@ -1,8 +1,10 @@
 export default class Barometer {
     static trendString(trendValue) {
         switch (trendValue) {
-            case -2:
+            case -3:
                 return "Falling rapidly";
+            case -2:
+                return "Falling";
             case -1:
                 return "Falling slowly";
             case 0:
@@ -10,6 +12,8 @@ export default class Barometer {
             case 1:
                 return "Rising slowly";
             case 2:
+                return "Rising";
+            case 3:
                 return "Rising rapidly";
         }
     }
@@ -17,6 +21,7 @@ export default class Barometer {
     constructor() {
         this.barometerValues = []; // Array of barometer values
         this.trends = []; // -2, -1, 0, 1, 2
+        this.timestamps = []; // Array of timestamps
 
         this.canvas = document.createElement("canvas");
         this.ctx = this.canvas.getContext("2d");
@@ -47,8 +52,8 @@ export default class Barometer {
 
         this.canvas.addEventListener("mousemove", event => {
             const rect = this.canvas.getBoundingClientRect();
-            this.mouse.x = event.clientX / rect.width * this.canvas.width - rect.x;
-            this.mouse.y = event.clientY / rect.height * this.canvas.height - rect.y;
+            this.mouse.x = (event.clientX - rect.x) / rect.width * this.canvas.width;
+            this.mouse.y = (event.clientY - rect.y) / rect.height * this.canvas.height;
         });
     }
 
@@ -152,8 +157,11 @@ export default class Barometer {
 
             if (selected >= 0 && selected < entries) {
                 ctx.fillStyle = "#FFFFFF";
-                ctx.font = "bold 16px sans-serif";    
-                ctx.fillText(this.barometerValues[selected] + " in Hg", 256, 256 - 8);
+                ctx.font = "bold 16px sans-serif";
+                ctx.fillText(new Date(this.timestamps[selected]).toLocaleString("en-US", {
+                    dateStyle: "short",
+                    timeStyle: "short"
+                }) + " - " + this.barometerValues[selected] + " in Hg", 256, 256 - 8);
 
                 ctx.strokeStyle = "#FFFFFF";
                 ctx.beginPath();
