@@ -81,9 +81,12 @@ export default class Wind {
         }
         ctx.stroke();
 
+        ctx.font = "bold 32px sans-serif";
+        ctx.fillText(currentDirection + "°", 0, 0);
+
         ctx.rotate(currentDirection * Math.PI / 180 - Math.PI / 2);
         ctx.translate(55, 0);
-        ctx.scale(3, 3);
+        ctx.scale(4, 4);
         ctx.moveTo(3, 0);
         ctx.lineTo(0, -1.5);
         ctx.lineTo(0, 1.5);

@@ -3,7 +3,7 @@ import Temperature from "./plugins/Temperature.js";
 import Wind from "./plugins/Wind.js";
 
 class Data {
-    static #DATA_URL = location.hostname === "wx.nfaschool.org" ? "//wx.nfaschool.org/api/data.json" : "./data2.json";
+    static #DATA_URL = location.hostname === "wx.nfaschool.org" ? "//wx.nfaschool.org/api/data.json" : "./data.json";
 
     /**
      * @type {{timestamp:number,data:object}[]}
