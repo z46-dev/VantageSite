@@ -1,9 +1,9 @@
 export default class Wind {
-    constructor(name) {
-        this.name = name;
+    constructor() {
         this.windSpeeds = []; // Array of wind speed values
         this.avg10Min = []; // Array of the avg 10-minute wind speeds
         this.windDirections = []; // Array of wind directions
+        this.timestamps = []; // Array of timestamps
 
         this.canvas = document.createElement("canvas");
         this.ctx = this.canvas.getContext("2d");
@@ -14,8 +14,6 @@ export default class Wind {
         this.ctx.textBaseline = "middle";
         this.ctx.textAlign = "center";
         this.ctx.lineCap = this.ctx.lineJoin = "round";
-
-        this.draw();
 
         this.mouse = {
             x: 0,
@@ -37,102 +35,69 @@ export default class Wind {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
 
         // Current value
-        const currentTemperature = this.temperatures[this.temperatures.length - 1];
-        const currentHumidity = this.humidities[this.humidities.length - 1];
+        const currentSpeed = this.windSpeeds[this.windSpeeds.length - 1];
+        const currentAvg10Min = this.avg10Min[this.avg10Min.length - 1];
+        const currentDirection = this.windDirections[this.windDirections.length - 1];
 
-        if (currentHumidity === undefined) {
+        if (currentAvg10Min === undefined) {
             return;
         }
 
         ctx.fillStyle = "#CC5555";
         ctx.fillRect(0, 0, 512, 256);
 
-        ctx.fillStyle = "#FFFFFF";
-        ctx.font = "bold 32px sans-serif";
-        ctx.textAlign = "center";
-        ctx.fillText(this.name, 256, 32);
-
         ctx.font = "bold 24px sans-serif";
         ctx.textAlign = "left";
-        ctx.fillText("Temperature: " + currentTemperature + "° F", 24, 64);
-        ctx.fillText("Humidity: " + currentHumidity + "%", 24, 96);
+        ctx.fillStyle = "#FFFFFF";
+        ctx.fillText("Wind Speed: " + currentSpeed + "mph", 24, 64);
+        ctx.fillText("10 Minute Avg: " + currentAvg10Min + " MPH", 24, 96);
 
         ctx.fillStyle = "#CCCC55";
         ctx.fillRect(8, 64 - 12, 12, 24);
         ctx.fillStyle = "#55CCCC";
         ctx.fillRect(8, 96 - 12, 12, 24);
 
-        // History graph
-        const entries = this.temperatures.length;
-        const spacing = 512 / entries;
-        const temperatureValues = [];
-        const humidityValues = [];
+        ctx.save();
+        ctx.translate(256 + 128, 128);
 
-
-        let minTemp = 0,
-            maxTemp = 100,
-            minHumidity = 0,
-            maxHumidity = 100;
-
-        for (let i = 0; i < entries; i++) {
-            {
-                const value = this.temperatures[i];
-                temperatureValues.push(value);
-            } {
-                const value = this.humidities[i];
-                humidityValues.push(value);
-            }
-        }
-
-        ctx.fillStyle = "#AA5555";
-        ctx.fillRect(0, 256, 512, 128);
-
-        ctx.beginPath();
-        ctx.moveTo(0, 256 + 128 - (this.temperatures[0] / 100) * 128);
-
-        for (let i = 1; i < entries; i++) {
-            ctx.lineTo(i * spacing, 256 + 128 - (this.temperatures[i] / 100) * 128);
-        }
-
-        ctx.strokeStyle = "#CCCC55";
+        ctx.strokeStyle = "#FFFFFF";
         ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.arc(0, 0, 75, 0, Math.PI * 2);
+        ctx.closePath();
         ctx.stroke();
 
         ctx.beginPath();
-        ctx.moveTo(0, 256 + 128 - (this.humidities[0] / 100) * 128);
+        ctx.fillStyle = "#FFFFFF";
+        ctx.font = "bold 12px sans-serif";
+        ctx.textAlign = "center";
+        for (let i = 0; i < 8; i ++) {
+            const angle = Math.PI / 4 * i - Math.PI / 2;
 
-        for (let i = 1; i < entries; i++) {
-            ctx.lineTo(i * spacing, 256 + 128 - (this.humidities[i] / 100) * 128);
+            ctx.moveTo(Math.cos(angle) * 70, Math.sin(angle) * 70);
+            ctx.lineTo(Math.cos(angle) * 80, Math.sin(angle) * 80);
+
+            ctx.fillText(i * 45 + "°", Math.cos(angle) * 95, Math.sin(angle) * 95);
         }
-
-        ctx.strokeStyle = "#55CCCC";
-        ctx.lineWidth = 2;
         ctx.stroke();
 
-        if (this.mouse.y > 256) {
-            const selected = Math.round(this.mouse.x / spacing);
+        ctx.rotate(currentDirection * Math.PI / 180 - Math.PI / 2);
+        ctx.translate(55, 0);
+        ctx.scale(3, 3);
+        ctx.moveTo(3, 0);
+        ctx.lineTo(0, -1.5);
+        ctx.lineTo(0, 1.5);
+        ctx.closePath();
+        ctx.fill();
 
-            if (selected >= 0 && selected < entries) {
-                ctx.fillStyle = "#FFFFFF";
-                ctx.font = "bold 16px sans-serif";
-                ctx.textAlign = "center";
-                ctx.fillText(new Date(this.timestamps[selected]).toLocaleString("en-US", {
-                    dateStyle: "short",
-                    timeStyle: "short"
-                }) + " - " + this.temperatures[selected] + "° F " + this.humidities[selected] + "%", 256, 256 - 8);
-
-                ctx.strokeStyle = "#FFFFFF";
-                ctx.beginPath();
-                ctx.moveTo(selected * spacing, 256);
-                ctx.lineTo(selected * spacing, 256 + 128);
-                ctx.stroke();
-            }
-        }
+        ctx.restore();
     }
 
     place(widthSize) {
         this.canvas.style.width = widthSize + "vmin";
         this.canvas.style.height = widthSize * (this.canvas.height / this.canvas.width) + "vmin";
+
+        this.draw();
 
         return this.canvas;
     }

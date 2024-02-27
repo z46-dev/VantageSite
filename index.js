@@ -1,5 +1,6 @@
 import Barometer from "./plugins/Barometer.js";
 import Temperature from "./plugins/Temperature.js";
+import Wind from "./plugins/Wind.js";
 
 class Data {
     static #DATA_URL = location.hostname === "wx.nfaschool.org" ? "//wx.nfaschool.org/api/data.json" : "./data2.json";
@@ -30,6 +31,7 @@ window.Data = Data;
 const barometer = new Barometer();
 const insideTemperature = new Temperature("Inside");
 const outsideTemperature = new Temperature("Outside");
+const wind = new Wind();
 
 Data.data.forEach(entry => {
     barometer.barometerValues.push(entry.data["Barometer"]);
@@ -43,8 +45,14 @@ Data.data.forEach(entry => {
     outsideTemperature.temperatures.push(entry.data["Outside Temperature"]);
     outsideTemperature.humidities.push(entry.data["Outside Humidity"] * 100);
     outsideTemperature.timestamps.push(entry.timestamp);
+
+    wind.windSpeeds.push(entry.data["Wind Speed"]);
+    wind.avg10Min.push(entry.data["10min Wind Speed"]);
+    wind.windDirections.push(entry.data["Wind Direction"]);
+    wind.timestamps.push(entry.timestamp);
 });
 
 document.body.appendChild(barometer.place(64));
 document.body.appendChild(insideTemperature.place(64));
 document.body.appendChild(outsideTemperature.place(64));
+document.body.appendChild(wind.place(64));

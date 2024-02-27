@@ -43,8 +43,6 @@ export default class Barometer {
         this.ctx.textAlign = "center";
         this.ctx.lineCap = this.ctx.lineJoin = "round";
 
-        this.draw();
-
         this.mouse = {
             x: 0,
             y: 0
@@ -175,6 +173,8 @@ export default class Barometer {
     place(widthSize) {
         this.canvas.style.width = widthSize + "vmin";
         this.canvas.style.height = widthSize * (this.canvas.height / this.canvas.width) + "vmin";
+
+        this.draw();
 
         return this.canvas;
     }
