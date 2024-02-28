@@ -10,9 +10,9 @@ class Data {
      */
     static data = [];
 
-    static async load() {
+    static async load(maxTime = 1000 * 60 * 60 * 3) {
         try {
-            const response = await fetch(Data.#DATA_URL);
+            const response = await fetch(Data.#DATA_URL + "?t=" + maxTime);
             Data.data = await response.json();
         } catch (error) {
             console.error("Error fetching data", error);
