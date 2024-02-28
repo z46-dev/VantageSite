@@ -24,16 +24,9 @@ body {
 /* Canvas Items in this container should be in a grid centered on the screen */
 #canvasGrid {
     display: grid;
-    grid-template-columns: repeat(1, 0fr);
+    grid-template-columns: repeat(auto-fit, minmax(500px, 0fr));
     grid-gap: 1vmin;
     justify-content: center;
     align-items: center;
     margin-top: 2vmin;
-}
-
-/* Mobile resize grid to 1 column */
-@media (min-width: 900px) {
-    #canvasGrid {
-        grid-template-columns: repeat(2, 0fr);
-    }
 }
