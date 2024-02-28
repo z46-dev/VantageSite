@@ -1,8 +1,7 @@
-export default class Wind {
+export default class Rain {
     constructor() {
-        this.windSpeeds = []; // Array of wind speed values
-        this.avg10Min = []; // Array of the avg 10-minute wind speeds
-        this.windDirections = []; // Array of wind directions
+        this.barometerValues = []; // Array of barometer values
+        this.trends = []; // -2, -1, 0, 1, 2
         this.timestamps = []; // Array of timestamps
 
         this.canvas = document.createElement("canvas");
@@ -10,6 +9,16 @@ export default class Wind {
 
         this.canvas.width = 512;
         this.canvas.height = 256 + 128;
+
+        this.dots = [];
+
+        for (let i = 0; i < this.canvas.width; i += 8) {
+            this.dots.push({
+                x: i,
+                y: Math.random() * 256,
+                speed: Math.random() * 2 + 2
+            });
+        }
 
         this.ctx.textBaseline = "middle";
         this.ctx.textAlign = "center";
@@ -34,74 +43,79 @@ export default class Wind {
 
         ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-        // Current value
-        const currentSpeed = this.windSpeeds[this.windSpeeds.length - 1];
-        const currentAvg10Min = this.avg10Min[this.avg10Min.length - 1];
-        const currentDirection = this.windDirections[this.windDirections.length - 1];
+        // Current value + Animation
+        const currentValue = this.barometerValues[this.barometerValues.length - 1];
+        const currentTrend = this.trends[this.trends.length - 1];
 
-        if (currentAvg10Min === undefined) {
+        if (currentTrend === undefined) {
             return;
         }
 
         ctx.fillStyle = "#CC5555";
         ctx.fillRect(0, 0, 512, 256);
 
-        ctx.font = "bold 24px sans-serif";
-        ctx.textAlign = "left";
-        ctx.fillStyle = "#FFFFFF";
-        ctx.fillText("Wind Speed: " + currentSpeed + "mph", 24, 64);
-        ctx.fillText("10 Minute Avg: " + currentAvg10Min + "mph", 24, 96);
+        ctx.fillStyle = "#AA2222";
+        ctx.globalAlpha = .5;
 
-        ctx.fillStyle = "#CCCC55";
-        ctx.fillRect(8, 64 - 12, 12, 24);
-        ctx.fillStyle = "#55CCCC";
-        ctx.fillRect(8, 96 - 12, 12, 24);
+        for (let i = 0; i < this.dots.length; i++) {
+            ctx.beginPath();
+            ctx.arc(this.dots[i].x, this.dots[i].y, 4, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.closePath();
 
-        ctx.save();
-        ctx.translate(256 + 128, 128);
+            if (currentTrend === 0) {
+                this.dots[i].x += this.dots[i].speed * (Math.sin(performance.now() / 3000) + .5);
+                this.dots[i].y = i / this.dots.length * 256;
 
-        ctx.strokeStyle = "#FFFFFF";
-        ctx.lineWidth = 2;
-        ctx.beginPath();
-        ctx.arc(0, 0, 75, 0, Math.PI * 2);
-        ctx.closePath();
-        ctx.stroke();
+                if (this.dots[i].x > canvas.width) {
+                    this.dots[i].x = 0;
+                }
 
-        ctx.beginPath();
-        ctx.fillStyle = "#FFFFFF";
-        ctx.font = "bold 12px sans-serif";
-        ctx.textAlign = "center";
-        for (let i = 0; i < 8; i ++) {
-            const angle = Math.PI / 4 * i - Math.PI / 2;
+                if (this.dots[i].x < 0) {
+                    this.dots[i].x = canvas.width;
+                }
+            } else {
+                this.dots[i].x = i / this.dots.length * canvas.width;
+                this.dots[i].y -= this.dots[i].speed * currentTrend;
 
-            ctx.moveTo(Math.cos(angle) * 70, Math.sin(angle) * 70);
-            ctx.lineTo(Math.cos(angle) * 80, Math.sin(angle) * 80);
+                if (this.dots[i].y < 0) {
+                    this.dots[i].y = 256;
+                }
 
-            ctx.fillText(["N", "NE", "E", "SE", "S", "SW", "W", "NW"][i], Math.cos(angle) * 95, Math.sin(angle) * 95);
+                if (this.dots[i].y > 256) {
+                    this.dots[i].y = 0;
+                }
+            }
         }
-        ctx.stroke();
 
+        ctx.globalAlpha = 1;
+        ctx.fillStyle = "#FFFFFF";
         ctx.font = "bold 32px sans-serif";
-        ctx.fillText(currentDirection + "°", 0, 0);
 
-        ctx.rotate(currentDirection * Math.PI / 180 - Math.PI / 2);
-        ctx.translate(55, 0);
-        ctx.scale(4, 4);
-        ctx.moveTo(3, 0);
-        ctx.lineTo(0, -1.5);
-        ctx.lineTo(0, 1.5);
-        ctx.closePath();
-        ctx.fill();
-
-        ctx.restore();
+        ctx.fillText("Barometer: " + currentValue + " in Hg", 256, 128);
+        ctx.font = "bold 24px sans-serif";
+        ctx.fillText("Trend: " + Barometer.trendString(currentTrend), 256, 192);
 
         // History graph
-        const entries = this.avg10Min.length;
+        const entries = this.barometerValues.length;
         const spacing = 512 / entries;
-        const values = this.avg10Min;
+        const values = [];
 
-        let min = Math.min(...values),
-            max = Math.max(...values);
+        let min = 9999,
+            max = -9999;
+
+        for (let i = 0; i < entries; i++) {
+            const value = (this.barometerValues[i] - 20) / 12.5;
+            values.push(value);
+
+            if (value < min) {
+                min = value;
+            }
+
+            if (value > max) {
+                max = value;
+            }
+        }
 
         ctx.fillStyle = "#AA5555";
         ctx.fillRect(0, 256, 512, 128);
@@ -123,11 +137,10 @@ export default class Wind {
             if (selected >= 0 && selected < entries) {
                 ctx.fillStyle = "#FFFFFF";
                 ctx.font = "bold 16px sans-serif";
-                ctx.textAlign = "center";
                 ctx.fillText(new Date(this.timestamps[selected]).toLocaleString("en-US", {
                     dateStyle: "short",
                     timeStyle: "short"
-                }) + " - " + this.windSpeeds[selected] + "mph (" + this.avg10Min[selected] + "mph 10min avg)", 256, 256 - 8);
+                }) + " - " + this.barometerValues[selected] + " in Hg", 256, 256 - 8);
 
                 ctx.strokeStyle = "#FFFFFF";
                 ctx.beginPath();

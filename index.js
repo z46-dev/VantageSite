@@ -52,7 +52,8 @@ Data.data.forEach(entry => {
     wind.timestamps.push(entry.timestamp);
 });
 
-document.body.appendChild(barometer.place(64));
-document.body.appendChild(insideTemperature.place(64));
-document.body.appendChild(outsideTemperature.place(64));
-document.body.appendChild(wind.place(64));
+const canvasGrid = document.getElementById("canvasGrid");
+canvasGrid.appendChild(barometer.place(64));
+canvasGrid.appendChild(insideTemperature.place(64));
+canvasGrid.appendChild(outsideTemperature.place(64));
+canvasGrid.appendChild(wind.place(64));

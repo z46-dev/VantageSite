@@ -1,0 +1,38 @@
+/* Default stuff and main body styles */
+* {
+    font-family: sans-serif;
+    font-weight: bold;
+}
+
+html, body {
+    width: 100%;
+    height: auto;
+    margin: 0px;
+    overflow-y: scroll;
+}
+
+/* Scrollbar Styles */
+::-webkit-scrollbar {
+    width: 1vmin;
+}
+
+::-webkit-scrollbar-track {
+    background: #000000;
+}
+
+/* Canvas Items in this container should be in a grid centered on the screen */
+#canvasGrid {
+    display: grid;
+    grid-template-columns: repeat(2, 0fr);
+    grid-gap: 1vmin;
+    justify-content: center;
+    align-items: center;
+    margin-top: 2vmin;
+}
+
+/* Mobile resize grid to 1 column */
+@media (max-width: 600px) {
+    #canvasGrid {
+        grid-template-columns: 1fr;
+    }
+}
