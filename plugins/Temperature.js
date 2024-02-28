@@ -1,4 +1,40 @@
 export default class Temperature {
+    static interpretTemperature(value) {
+        if (value === undefined) {
+            return "N/A";
+        }
+
+        if (value > 100) {
+            return "Unbearably Hot";
+        }
+
+        if (value > 90) {
+            return "Very Hot";
+        }
+
+        if (value > 80) {
+            return "Hot";
+        }
+
+        if (value > 70) {
+            return "Warm";
+        }
+
+        if (value > 50) {
+            return "Mild";
+        }
+
+        if (value > 32) {
+            return "Cool";
+        }
+
+        if (value > 16) {
+            return "Cold";
+        }
+
+        return "Freezing";
+    }
+
     constructor(name) {
         this.name = name;
         this.temperatures = []; // Array of temperature values
@@ -59,6 +95,15 @@ export default class Temperature {
         ctx.fillRect(8, 64 - 12, 12, 24);
         ctx.fillStyle = "#55CCCC";
         ctx.fillRect(8, 96 - 12, 12, 24);
+
+        ctx.font = "bold 18px sans-serif";
+        ctx.fillStyle = "#FFFFFF";
+        ctx.fillText("HI: " + Math.max(...this.temperatures) + "° F, " + Math.max(...this.humidities) + "%", 24, 128);
+        ctx.fillText("LO: " + Math.min(...this.temperatures) + "° F, " + Math.min(...this.humidities) + "%", 24, 160);
+
+        ctx.font = "bold 32px sans-serif";
+        ctx.textAlign = "right";
+        ctx.fillText("It's " + Temperature.interpretTemperature(currentTemperature).toLocaleLowerCase() + " " + this.name.toLocaleLowerCase(), 512 - 32, 256 - 64);
 
         // History graph
         const entries = this.temperatures.length;
