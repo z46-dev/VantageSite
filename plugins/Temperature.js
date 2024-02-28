@@ -66,12 +66,6 @@ export default class Temperature {
         const temperatureValues = [];
         const humidityValues = [];
 
-
-        let minTemp = 0,
-            maxTemp = 100,
-            minHumidity = 0,
-            maxHumidity = 100;
-
         for (let i = 0; i < entries; i++) {
             {
                 const value = this.temperatures[i];

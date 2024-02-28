@@ -50,7 +50,7 @@ export default class Wind {
         ctx.textAlign = "left";
         ctx.fillStyle = "#FFFFFF";
         ctx.fillText("Wind Speed: " + currentSpeed + "mph", 24, 64);
-        ctx.fillText("10 Minute Avg: " + currentAvg10Min + " MPH", 24, 96);
+        ctx.fillText("10 Minute Avg: " + currentAvg10Min + "mph", 24, 96);
 
         ctx.fillStyle = "#CCCC55";
         ctx.fillRect(8, 64 - 12, 12, 24);
@@ -77,7 +77,7 @@ export default class Wind {
             ctx.moveTo(Math.cos(angle) * 70, Math.sin(angle) * 70);
             ctx.lineTo(Math.cos(angle) * 80, Math.sin(angle) * 80);
 
-            ctx.fillText(i * 45 + "°", Math.cos(angle) * 95, Math.sin(angle) * 95);
+            ctx.fillText(["N", "NE", "E", "SE", "S", "SW", "W", "NW"][i], Math.cos(angle) * 95, Math.sin(angle) * 95);
         }
         ctx.stroke();
 
@@ -94,6 +94,48 @@ export default class Wind {
         ctx.fill();
 
         ctx.restore();
+
+        // History graph
+        const entries = this.avg10Min.length;
+        const spacing = 512 / entries;
+        const values = this.avg10Min;
+
+        let min = Math.min(...values),
+            max = Math.max(...values);
+
+        ctx.fillStyle = "#AA5555";
+        ctx.fillRect(0, 256, 512, 128);
+
+        ctx.beginPath();
+        ctx.moveTo(0, 256 + 128 - ((values[0] - min) / (max - min)) * 128);
+
+        for (let i = 1; i < entries; i++) {
+            ctx.lineTo(i * spacing, 256 + 128 - ((values[i] - min) / (max - min)) * 128);
+        }
+
+        ctx.strokeStyle = "#FFFFFF";
+        ctx.lineWidth = 2;
+        ctx.stroke();
+
+        if (this.mouse.y > 256) {
+            const selected = Math.round(this.mouse.x / spacing);
+
+            if (selected >= 0 && selected < entries) {
+                ctx.fillStyle = "#FFFFFF";
+                ctx.font = "bold 16px sans-serif";
+                ctx.textAlign = "center";
+                ctx.fillText(new Date(this.timestamps[selected]).toLocaleString("en-US", {
+                    dateStyle: "short",
+                    timeStyle: "short"
+                }) + " - " + this.windSpeeds[selected] + "mph " + this.avg10Min[selected] + "mph 10min avg", 256, 256 - 8);
+
+                ctx.strokeStyle = "#FFFFFF";
+                ctx.beginPath();
+                ctx.moveTo(selected * spacing, 256);
+                ctx.lineTo(selected * spacing, 256 + 128);
+                ctx.stroke();
+            }
+        }
     }
 
     place(widthSize) {
