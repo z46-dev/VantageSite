@@ -4,7 +4,8 @@
     font-weight: bold;
 }
 
-html, body {
+html,
+body {
     width: 100%;
     height: auto;
     margin: 0px;
@@ -23,7 +24,7 @@ html, body {
 /* Canvas Items in this container should be in a grid centered on the screen */
 #canvasGrid {
     display: grid;
-    grid-template-columns: repeat(2, 0fr);
+    grid-template-columns: repeat(1, 0fr);
     grid-gap: 1vmin;
     justify-content: center;
     align-items: center;
@@ -31,8 +32,8 @@ html, body {
 }
 
 /* Mobile resize grid to 1 column */
-@media (max-width: 600px) {
+@media (min-width: 900px) {
     #canvasGrid {
-        grid-template-columns: 1fr;
+        grid-template-columns: repeat(2, 0fr);
     }
 }
