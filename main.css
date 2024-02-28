@@ -12,20 +12,13 @@ body {
     overflow-y: scroll;
 }
 
-/* Scrollbar Styles */
-::-webkit-scrollbar {
-    width: 1vmin;
-}
-
-::-webkit-scrollbar-track {
-    background: #000000;
-}
-
 /* Canvas Items in this container should be in a grid centered on the screen */
 #canvasGrid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(500px, 0fr));
+    grid-template-columns: repeat(auto-fit, minmax(450px, 0fr));
+    grid-gap: 1vmin;
     justify-content: center;
+    justify-self: center;
     align-items: center;
     margin-top: 2vmin;
 }

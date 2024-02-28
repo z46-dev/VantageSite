@@ -1,6 +1,6 @@
 export default class Rain {
     constructor() {
-        this.barometerValues = []; // Array of barometer values
+        this.dayRain = []; // Array of barometer values
         this.trends = []; // -2, -1, 0, 1, 2
         this.timestamps = []; // Array of timestamps
 
