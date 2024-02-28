@@ -25,7 +25,6 @@ body {
 #canvasGrid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(500px, 0fr));
-    grid-gap: 1vmin;
     justify-content: center;
     align-items: center;
     margin-top: 2vmin;
