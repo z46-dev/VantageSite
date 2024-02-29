@@ -162,7 +162,7 @@ export default class Barometer {
                 ctx.fillText(new Date(this.timestamps[selected]).toLocaleString("en-US", {
                     dateStyle: "short",
                     timeStyle: "short"
-                }) + " - " + this.barometerValues[selected] + " in Hg", 256, 256 - 8);
+                }) + " - " + this.barometerValues[selected] + " inches Hg", 256, 256 - 8);
 
                 ctx.strokeStyle = "#FFFFFF";
                 ctx.beginPath();

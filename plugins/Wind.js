@@ -49,9 +49,9 @@ export default class Wind {
         ctx.font = "bold 24px sans-serif";
         ctx.textAlign = "left";
         ctx.fillStyle = "#FFFFFF";
-        ctx.fillText("Wind Speed: " + currentSpeed + "mph", 24, 64);
-        ctx.fillText("10 Minute Avg: " + currentAvg10Min + "mph", 24, 96);
-        ctx.fillText("Highest Gust: " + Math.max(...this.windSpeeds) + "mph", 24, 128);
+        ctx.fillText("Wind Speed: " + currentSpeed + " mph", 24, 64);
+        ctx.fillText("10 Minute Avg: " + currentAvg10Min + " mph", 24, 96);
+        ctx.fillText("Highest Gust: " + Math.max(...this.windSpeeds) + " mph", 24, 128);
 
         ctx.fillStyle = "#CCCC55";
         ctx.fillRect(8, 64 - 12, 12, 24);
@@ -138,7 +138,7 @@ export default class Wind {
                 ctx.fillText(new Date(this.timestamps[selected]).toLocaleString("en-US", {
                     dateStyle: "short",
                     timeStyle: "short"
-                }) + " - " + this.windSpeeds[selected] + "mph (" + this.avg10Min[selected] + "mph 10min avg)", 256, 256 - 8);
+                }) + " - " + this.windSpeeds[selected] + " mph (" + this.avg10Min[selected] + " mph 10min avg)", 256, 256 - 8);
 
                 ctx.strokeStyle = "#FFFFFF";
                 ctx.beginPath();
