@@ -11,6 +11,21 @@
 <body>
     <div id="banner">
         <img src="./img/NFA_learn_connect.png" alt="NFA Banner" />
+        <select id="timeSelect" value="3 Hours">
+            <!-- Values are expressions that are parsed without eval -->
+            <option value="3">3 Hours</option>
+            <option value="6">6 Hours</option>
+            <option value="12">12 Hours</option>
+            <option value="18">18 Hours</option>
+            <option value="24">1 Day</option>
+            <option value="72">3 Days</option>
+            <option value="24 * 7">1 Week</option>
+            <option value="24 * 7 * 2">2 Weeks</option>
+            <option value="24 * 30.4">1 Month</option>
+            <option value="24 * 30.4 * 3">3 Months</option>
+            <option value="24 * 30.4 * 6">6 Months</option>
+            <option value="Infinity">All Data</option>
+        </select>
     </div>
     <div id="canvasGrid"></div>
     <div id="footer">

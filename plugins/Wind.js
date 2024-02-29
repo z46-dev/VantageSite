@@ -51,6 +51,7 @@ export default class Wind {
         ctx.fillStyle = "#FFFFFF";
         ctx.fillText("Wind Speed: " + currentSpeed + "mph", 24, 64);
         ctx.fillText("10 Minute Avg: " + currentAvg10Min + "mph", 24, 96);
+        ctx.fillText("Highest Gust: " + Math.max(...this.windSpeeds) + "mph", 24, 128);
 
         ctx.fillStyle = "#CCCC55";
         ctx.fillRect(8, 64 - 12, 12, 24);
@@ -100,8 +101,8 @@ export default class Wind {
         const spacing = 512 / entries;
         const values = this.avg10Min;
 
-        let min = Math.min(...values),
-            max = Math.max(...values);
+        let min = Math.min(...values, ...this.windSpeeds),
+            max = Math.max(...values, ...this.windSpeeds);
 
         ctx.fillStyle = "#C92A39";
         ctx.fillRect(0, 256, 512, 128);
@@ -113,8 +114,18 @@ export default class Wind {
             ctx.lineTo(i * spacing, 256 + 128 - ((values[i] - min) / (max - min)) * 128);
         }
 
-        ctx.strokeStyle = "#FFFFFF";
+        ctx.strokeStyle = "#55CCCC";
         ctx.lineWidth = 2;
+        ctx.stroke();
+
+        ctx.beginPath();
+        ctx.moveTo(0, 256 + 128 - ((this.windSpeeds[0] - min) / (max - min)) * 128);
+
+        for (let i = 1; i < entries; i++) {
+            ctx.lineTo(i * spacing, 256 + 128 - ((this.windSpeeds[i] - min) / (max - min)) * 128);
+        }
+
+        ctx.strokeStyle = "#CCCC55";
         ctx.stroke();
 
         if (this.mouse.y > 256) {

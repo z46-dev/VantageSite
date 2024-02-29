@@ -110,10 +110,13 @@ export default class Barometer {
         ctx.globalAlpha = 1;
         ctx.fillStyle = "#FFFFFF";
         ctx.font = "bold 32px sans-serif";
-
-        ctx.fillText("Barometer: " + currentValue + " in Hg", 256, 128);
+        ctx.textAlign = "center";
+        ctx.fillText("Barometric Pressure", 256, 32);
         ctx.font = "bold 24px sans-serif";
-        ctx.fillText("Trend: " + Barometer.trendString(currentTrend), 256, 192);
+        ctx.textAlign = "left";
+        ctx.fillText(currentValue + " inches Hg", 8, 64);
+        ctx.fillText("Trend: " + Barometer.trendString(currentTrend), 8, 96);
+        ctx.textAlign = "center";
 
         // History graph
         const entries = this.barometerValues.length;
