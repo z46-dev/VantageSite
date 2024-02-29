@@ -117,7 +117,7 @@ export default class Rain {
             }
         }
 
-        ctx.fillStyle = "#AA5555";
+        ctx.fillStyle = "#C92A39";
         ctx.fillRect(0, 256, 512, 128);
 
         ctx.beginPath();
