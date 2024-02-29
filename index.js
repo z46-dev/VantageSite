@@ -39,11 +39,11 @@ Data.data.forEach(entry => {
     barometer.timestamps.push(entry.timestamp);
 
     insideTemperature.temperatures.push(entry.data["Inside Temperature"]);
-    insideTemperature.humidities.push(entry.data["Inside Humidity"] * 100);
+    insideTemperature.humidities.push(entry.data["Inside Humidity"] * 100 | 0);
     insideTemperature.timestamps.push(entry.timestamp);
 
     outsideTemperature.temperatures.push(entry.data["Outside Temperature"]);
-    outsideTemperature.humidities.push(entry.data["Outside Humidity"] * 100);
+    outsideTemperature.humidities.push(entry.data["Outside Humidity"] * 100 | 0);
     outsideTemperature.timestamps.push(entry.timestamp);
 
     wind.windSpeeds.push(entry.data["Wind Speed"]);
