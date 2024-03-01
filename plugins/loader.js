@@ -32,6 +32,11 @@ function draw() {
     }
 
     ctx.clearRect(0, 0, 512, 512);
+    ctx.fillStyle = "#40434E";
+    ctx.beginPath();
+    ctx.arc(256, 256, 252, 0, Math.PI * 2);
+    ctx.fill();
+
     ctx.fillStyle = "#AA3333";
 
     const baseAngle = performance.now() / 800 + Math.PI * ((performance.now() | 0) % 3000 > 1500);
