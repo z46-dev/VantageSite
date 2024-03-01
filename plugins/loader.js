@@ -33,7 +33,7 @@ function draw() {
 
     ctx.clearRect(0, 0, 512, 512);
     ctx.fillStyle = "#40434E";
-    ctx.globalAlpha = .2;
+    ctx.globalAlpha = .4;
     ctx.beginPath();
     ctx.arc(256, 256, 252, 0, Math.PI * 2);
     ctx.fill();
@@ -65,8 +65,9 @@ function draw() {
     ctx.strokeStyle = "#C8C8C8";
     ctx.lineJoin = ctx.lineCap = "round";
     ctx.lineWidth = 4;
-    ctx.strokeText("Loading Data", 256, 256);
-    ctx.fillText("Loading Data", 256, 256);
+    const dotdotdot = ".".repeat(1 + ((performance.now() | 0) % 3));
+    ctx.strokeText("Loading Data" + dotdotdot, 256, 256);
+    ctx.fillText("Loading Data" + dotdotdot, 256, 256);
 }
 
 export function on() {
