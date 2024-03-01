@@ -65,7 +65,7 @@ function draw() {
     ctx.strokeStyle = "#C8C8C8";
     ctx.lineJoin = ctx.lineCap = "round";
     ctx.lineWidth = 4;
-    const dotdotdot = ".".repeat(1 + ((performance.now() / 10 | 0) % 3));
+    const dotdotdot = ".".repeat(1 + ((performance.now() / 1000 | 0) % 3));
     ctx.strokeText("Loading Data" + dotdotdot, 256, 256);
     ctx.fillText("Loading Data" + dotdotdot, 256, 256);
 }
