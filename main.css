@@ -8,6 +8,7 @@
 * {
     font-family: sans-serif;
     font-weight: bold;
+    transition: all ease-in-out .2s;
 }
 
 html,
@@ -77,6 +78,19 @@ option {
 @media screen and (max-width: 800px) {
     #canvasGrid {
         grid-template-columns: repeat(auto-fit, minmax(60vmin, 1fr));
+    }
+
+    #banner {
+        width: calc(100% - 6vmin);
+        height: auto;
+        padding: 3vmin;
+        text-align: center;
+    }
+
+    #banner img {
+        width: calc(100% - 6vmin);
+        height: auto;
+        margin-bottom: 3vmin;
     }
 }
 
