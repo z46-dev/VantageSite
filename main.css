@@ -65,6 +65,10 @@ option {
     gap: 3vmin 0vmin;
 }
 
+#canvasGrid canvas {
+    border-radius: 1vmin;
+}
+
 /* Footer Design */
 #footer {
     background-color: var(--accent);
