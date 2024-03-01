@@ -75,7 +75,7 @@ option {
 }
 
 /* Additional Styles for smaller screens */
-@media screen and (max-width: 800px) {
+@media screen and (max-width: 300px) {
     #canvasGrid {
         grid-template-columns: repeat(auto-fit, minmax(60vmin, 1fr));
     }
