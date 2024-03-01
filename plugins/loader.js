@@ -33,9 +33,11 @@ function draw() {
 
     ctx.clearRect(0, 0, 512, 512);
     ctx.fillStyle = "#40434E";
+    ctx.globalAlpha = .2;
     ctx.beginPath();
     ctx.arc(256, 256, 252, 0, Math.PI * 2);
     ctx.fill();
+    ctx.globalAlpha = 1;
 
     ctx.fillStyle = "#AA3333";
 
