@@ -34,6 +34,23 @@ body {
     height: 6vmin;
     margin-left: 3vmin;
     margin-top: 3vmin;
+    margin-right: 6vmin;
+}
+
+select {
+    border: none;
+    background-color: var(--secondary);
+    font-size: 4vmin;
+    color: var(--accent);
+}
+
+select:focus {
+    outline: none;
+}
+
+option {
+    width: 100%;
+    color: var(--accent);
 }
 
 /* Canvas Items in this container should be in a grid centered on the screen */
@@ -61,4 +78,13 @@ body {
     #canvasGrid {
         grid-template-columns: repeat(auto-fit, minmax(60vmin, 1fr));
     }
+}
+
+#loadingCanvas {
+    width: 32vmin;
+    height: 32vmin;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
 }

@@ -1,6 +1,7 @@
 import Barometer from "./plugins/Barometer.js";
 import Temperature from "./plugins/Temperature.js";
 import Wind from "./plugins/Wind.js";
+import { off, on } from "./plugins/loader.js";
 
 const barometer = new Barometer();
 const insideTemperature = new Temperature("Inside");
@@ -17,7 +18,7 @@ class Data {
     static time = 1000 * 60 * 60 * 3;
 
     static async load(maxTime = Data.time) {
-        console.log(maxTime / 60 / 60 / 1000);
+        on();
         try {
             const response = await fetch(Data.#DATA_URL + "?t=" + maxTime);
             Data.data = await response.json();
@@ -27,6 +28,7 @@ class Data {
 
         Data.parse(maxTime);
         init();
+        off();
     }
 
     static parse(maxTime) {
