@@ -35,7 +35,10 @@ export default class Barometer {
             this.dots.push({
                 x: i,
                 y: Math.random() * 256,
-                speed: Math.random() * 2 + 2
+                speed: Math.random() * 2 + 2,
+                idleVelocityLength: 0,
+                idleVelocityAngle: 0,
+                idleVelocityDrag: Math.random() * .2 + .8
             });
         }
 
@@ -83,27 +86,37 @@ export default class Barometer {
             ctx.closePath();
 
             if (currentTrend === 0) {
-                this.dots[i].x += this.dots[i].speed * (Math.sin(performance.now() / 3000) + .5);
-                this.dots[i].y = i / this.dots.length * 256;
+                // this.dots[i].x += this.dots[i].speed * (Math.sin(performance.now() / 3000) + .5);
+                // this.dots[i].y = i / this.dots.length * 256;
 
-                if (this.dots[i].x > canvas.width) {
-                    this.dots[i].x = 0;
+                if (this.dots[i].idleVelocityLength < .01) {
+                    this.dots[i].idleVelocityLength = 3 + Math.random() * 3;
+                    this.dots[i].idleVelocityAngle = Math.PI * 2 * Math.random();
+                    this.dots[i].idleVelocityDrag = Math.random() * .2 + .8;
                 }
 
-                if (this.dots[i].x < 0) {
-                    this.dots[i].x = canvas.width;
-                }
+                this.dots[i].x += this.dots[i].idleVelocityLength * Math.cos(this.dots[i].idleVelocityAngle);
+                this.dots[i].y += this.dots[i].idleVelocityLength * Math.sin(this.dots[i].idleVelocityAngle);
+                this.dots[i].idleVelocityLength *= this.dots[i].idleVelocityDrag;
             } else {
                 this.dots[i].x = i / this.dots.length * canvas.width;
                 this.dots[i].y -= this.dots[i].speed * currentTrend;
+            }
 
-                if (this.dots[i].y < 0) {
-                    this.dots[i].y = 256;
-                }
+            if (this.dots[i].x > canvas.width) {
+                this.dots[i].x = 0;
+            }
 
-                if (this.dots[i].y > 256) {
-                    this.dots[i].y = 0;
-                }
+            if (this.dots[i].x < 0) {
+                this.dots[i].x = canvas.width;
+            }
+
+            if (this.dots[i].y < 0) {
+                this.dots[i].y = 256;
+            }
+
+            if (this.dots[i].y > 256) {
+                this.dots[i].y = 0;
             }
         }
 
@@ -116,6 +129,9 @@ export default class Barometer {
         ctx.textAlign = "left";
         ctx.fillText(currentValue + " inches Hg", 8, 64);
         ctx.fillText("Trend: " + Barometer.trendString(currentTrend), 8, 96);
+        ctx.font = "bold 18px sans-serif";
+        ctx.fillText("HI: " + Math.max(...this.barometerValues) + " inches Hg", 8, 128);
+        ctx.fillText("LO: " + Math.min(...this.barometerValues) + " inches Hg", 8, 160);
         ctx.textAlign = "center";
 
         // History graph
